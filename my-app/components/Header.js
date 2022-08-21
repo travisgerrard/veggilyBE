@@ -1,9 +1,34 @@
-import React from 'react'
+import React from 'react';
+import Link from 'next/link';
 
-export const Header = () => {
-    return(
-        <div className="header">
-            <h1>Next.js With NodeJS</h1>
-        </div>
-    )
+export default function Header({ currentUser }) {
+  const links = [
+    !currentUser && { label: 'Sign Up', href: '/auth/signup' },
+    !currentUser && { label: 'Sign In', href: '/auth/signin' },
+    currentUser && { label: 'Create Meal', href: '/meals/new' },
+    // currentUser && { label: 'Grocery List', href: '/lists' },
+    currentUser && { label: 'Plan', href: '/plans' },
+    currentUser && { label: 'Sign Out', href: '/auth/signout' },
+  ]
+    .filter((linkConfig) => linkConfig)
+    .map(({ label, href }) => {
+      return (
+        <li key={href} className="nav-item">
+          <Link href={href}>
+            <a className="nav-link">{label}</a>
+          </Link>
+        </li>
+      );
+    });
+
+  return (
+    <nav className="navbar navbar-light bg-light">
+      <Link href="/">
+        <a className="navbar-brand">Veggily</a>
+      </Link>
+      <div className="d-flex justify-content-end">
+        <ul className="nav d-flex align-items-center">{links}</ul>
+      </div>
+    </nav>
+  );
 }
