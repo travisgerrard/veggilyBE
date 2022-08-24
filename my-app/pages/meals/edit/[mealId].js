@@ -128,7 +128,11 @@ export default function EditMeal({ meal }) {
 }
 
 EditMeal.getInitialProps = async (context, client) => {
-  const { mealId } = context.query;
+  let { mealId } = context.query;
+  if (mealId === undefined) {
+    mealId = "62df673f60fb315ff0bbc75e"
+  }
+  console.log('mealId = ', mealId);
   const { data: mealData } = await client.get(`/api/meals/${mealId}`);
 
   return {

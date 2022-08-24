@@ -2,8 +2,9 @@ const express = require('express');
 const next = require('next');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
-const port = process.env.PORT || 3081;
-const dev = process.env.NODE_ENV !== 'production';
+// const port = process.env.PORT || 3081;
+const port = 3081;
+const dev = true; //process.env.NODE_ENV !== 'NODE_ENV';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -17,7 +18,7 @@ const apiPaths = {
   },
 };
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+const isDevelopment = true; //process.env.NODE_ENV !== 'production';
 
 app
   .prepare()

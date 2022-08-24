@@ -1,7 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
+import PlanShow from './plans/index'
 
-const LandingPage = ({ currentUser, meals }) => {
+const LandingPage = ({ currentUser, meals, plans }) => {
   const mealList = meals.map((meal) => {
     return (
       <tr key={meal.id}>
@@ -30,6 +31,8 @@ const LandingPage = ({ currentUser, meals }) => {
 
   return (
     <div>
+      {currentUser && <PlanShow plans={plans} />}
+      <br />
       <h2>Meals</h2>
       <table className="table">
         <thead>
@@ -47,6 +50,12 @@ const LandingPage = ({ currentUser, meals }) => {
 
 LandingPage.getInitialProps = async (context, client, currentUser) => {
   const { data } = await client.get('/api/meals');
+
+  if (currentUser) {
+    const { data: plans } = await client.get('/api/plans');
+    return { meals: data, plans };
+
+  }
 
   return { meals: data };
 };

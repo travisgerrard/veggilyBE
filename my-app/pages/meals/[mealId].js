@@ -173,7 +173,11 @@ export default function MealShow({
 }
 
 MealShow.getInitialProps = async (context, client) => {
-  const { mealId } = context.query;
+  let { mealId } = context.query;
+  if (mealId === undefined) {
+    mealId = "62df673f60fb315ff0bbc75e"
+  }
+
   const { data: mealData } = await client.get(`/api/meals/${mealId}`);
   const { data: ingredientData } = await client.get(
     `/api/ingredients/meal/${mealId}`
@@ -240,7 +244,7 @@ export function InstructionListItem({
 
   const { doRequest: deleteInstruction, errors: deleteInstructionError } =
     useRequest({
-      url: `/api/instructions//${instruction.id}`,
+      url: `/api/instructions/${instruction.id}`,
       method: 'delete',
       body: {},
       onSuccess: (event) => {

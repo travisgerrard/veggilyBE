@@ -1,5 +1,6 @@
 import express from 'express';
 import 'express-async-errors';
+import path from 'path';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import { errorHandler, NotFoundError, currentUser } from '@tgticketing/common';
@@ -51,6 +52,8 @@ app.use(
     secure: false, //process.env.NODE_ENV !== 'test',
   })
 );
+app.use(express.static(path.join(__dirname, '../../my-app/out')));
+
 
 app.use(currentUser);
 
@@ -98,6 +101,10 @@ app.use(decreaseInstructionOrderRouter);
 app.use(createInstructionRouter);
 app.use(deleteInstructionRouter);
 app.use(indexInstructionRouter);
+
+app.get('/', (req,res) => {
+  res.sendFile(path.join(__dirname, '../../my-app/out/index.html'));
+});
 
 app.all('*', async () => {
   throw new NotFoundError();

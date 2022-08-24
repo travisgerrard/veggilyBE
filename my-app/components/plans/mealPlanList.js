@@ -51,6 +51,7 @@ export default function MealPlanList({ planList }) {
   const plan = planList.map((meal) => {
     return (
       <>
+        {meal.meal &&
         <li
           key={meal.id}
           className="list-group-item d-flex justify-content-between align-items-center"
@@ -104,7 +105,8 @@ export default function MealPlanList({ planList }) {
             Delete
           </span>
         </li>
-        {meal.ingredients.length > 0 && (
+        }
+        {meal.ingredients?.length > 0 && (
           <div style={{ paddingLeft: '25px' }}>
             <GroceryIngredientList groceryList={meal.ingredients} />
           </div>
