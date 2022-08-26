@@ -56,12 +56,16 @@ export default function NewMeal() {
       formData.append('image', file);
       formData.set('title', title);
       formData.set('whereToFind', whereToFind);
-      const post = await axios.post('/api/meals', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return post.data;
+      try {
+        const post = await axios.post('/api/meals', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        Router.push('/');
+      } catch (error) {
+        console.log(err);
+      }
     } else {
       doRequest();
     }

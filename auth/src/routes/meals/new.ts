@@ -14,7 +14,7 @@ import { Meal } from '../../models/meal';
 
 const router = express.Router();
 
-const formatCloudinaryUrl = (
+export const formatCloudinaryUrl = (
   url: string,
   size: { width: number; height: number },
   thumb: Boolean
@@ -37,7 +37,6 @@ router.post(
   upload,
 
   [check('title').notEmpty().withMessage('Title is required')],
-  // [body('title').not().isEmpty().withMessage('Title is required')],
   validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
     const { title, whereToFind, imageUrl, thumbnail, mealType } = req.body;

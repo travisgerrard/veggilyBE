@@ -5,6 +5,7 @@ import { MealDoc } from './meal';
 interface CommentAttrs {
   comment: string;
   imageUrl: string;
+  thumbnail: string;
   creatorId: string;
   dateMade: Date;
   meal: MealDoc;
@@ -13,6 +14,7 @@ interface CommentAttrs {
 interface CommentDoc extends mongoose.Document {
   comment: string;
   imageUrl: string;
+  thumbnail: string;
   creatorId: string;
   dateMade: Date;
   meal: MealDoc;
@@ -30,6 +32,10 @@ const commentSchema = new mongoose.Schema(
       require: true,
     },
     imageUrl: {
+      type: String,
+      require: false,
+    },
+    thumbnail: {
       type: String,
       require: false,
     },
