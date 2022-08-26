@@ -7,7 +7,6 @@ interface IngredientAttrs {
   title: string;
   ingredientType: IngredientType;
   imageUrl: string;
-  thumbnail: string;
   creatorId: string;
   meal: MealDoc;
   orderNumber: number;
@@ -17,7 +16,6 @@ interface IngredientDoc extends mongoose.Document {
   title: string;
   ingredientType: IngredientType;
   imageUrl: string;
-  thumbnail: string;
   creatorId: string;
   meal: MealDoc;
   orderNumber: number;
@@ -38,10 +36,7 @@ const ingredientSchema = new mongoose.Schema(
       type: String,
       require: false,
     },
-    thumbnail: {
-      type: String,
-      require: false,
-    },
+
     creatorId: {
       type: String,
       require: true,
