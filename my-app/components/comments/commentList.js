@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useRequest from '../../hooks/use-request';
 import axios from 'axios';
+import Link from 'next/link';
 
 export default function CommentList({ comments }) {
   const [commentsArray, setCommentsArray] = useState(comments);
@@ -23,6 +24,8 @@ export function CommentListItem({ comment: commentItem, comments }) {
 
   const [commentText, setCommentText] = useState(commentItem.comment);
 
+  console.log(commentItem);
+
   return (
     <div
       className="list-group-item list-group-item-action"
@@ -32,6 +35,16 @@ export function CommentListItem({ comment: commentItem, comments }) {
         <div>
           <p className="mb-1">{new Date(commentTime).toLocaleString()}</p>
         </div>
+        <small
+        // className="bg-primary rounded-pill btn"
+        // style={{ color: 'white' }}
+        >
+          {commentItem.meal && (
+            <Link href="/meals/[mealdId]" as={`/meals/${commentItem.meal.id}`}>
+              {commentItem.meal.title}
+            </Link>
+          )}
+        </small>
       </div>
 
       <div className="d-flex w-100">

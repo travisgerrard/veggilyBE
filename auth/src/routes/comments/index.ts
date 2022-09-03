@@ -36,8 +36,9 @@ router.get('/api/comments/', async (req: Request, res: Response) => {
 
   const comments = await Comment.find({
     creatorId: req.currentUser!.id,
-  }).sort({ dateMade: -1 });
-
+  })
+    .populate('meal')
+    .sort({ dateMade: -1 });
   res.send(comments);
 });
 
