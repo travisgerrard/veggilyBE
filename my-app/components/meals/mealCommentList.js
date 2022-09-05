@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useRequest from '../../hooks/use-request';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
 
 export default function MealCommentList({ comments, mealId }) {
   const [comment, setComment] = useState('');
@@ -285,7 +286,9 @@ export function CommentListItem({
               }}
             />
           )}
-          <h5 className="mb-1 align-self-center">{commentText}</h5>
+          <h5 className="mb-1 align-self-center">
+            <ReactMarkdown>{commentText}</ReactMarkdown>
+          </h5>
         </div>
       )}
     </div>
