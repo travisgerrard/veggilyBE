@@ -10,6 +10,7 @@ export default function MealIngredientList({
 }) {
   const [ingredientArray, setIngredientArray] = useState(ingredients);
   const [title, setTitle] = useState('');
+  const [editIngredients, setEditIngredients] = useState(false);
 
   const { doRequest: addIngredient, errors } = useRequest({
     url: '/api/ingredients',
@@ -41,6 +42,7 @@ export default function MealIngredientList({
         ingredient={ingredient}
         ingredients={ingredientArray}
         updateIngredients={updateIngredients}
+        editIngredients={editIngredients}
         key={ingredient.id}
         createdMeal={createdMeal}
         isLoggedIn={isLoggedIn}
@@ -50,6 +52,11 @@ export default function MealIngredientList({
 
   return (
     <>
+      {createdMeal && (
+        <a href="#" onClick={() => setEditIngredients(!editIngredients)}>
+          {editIngredients ? 'Stop Editing Ingredients' : 'Edit Ingredients'}
+        </a>
+      )}
       <ul className="list-group">{ingredientList}</ul>
       {createdMeal && (
         <form onSubmit={onSubmit}>
@@ -75,6 +82,7 @@ export function MealIngredientListItem({
   ingredient,
   ingredients,
   updateIngredients,
+  editIngredients,
   isLoggedIn,
   createdMeal,
 }) {
@@ -148,7 +156,7 @@ export function MealIngredientListItem({
     <li className="list-group-item d-flex justify-content-between align-items-center">
       <ReactMarkdown>{ingredient.title}</ReactMarkdown>
       <span>
-        {createdMeal && (
+        {createdMeal && editIngredients && (
           <>
             <span
               className="badge bg-primary rounded-pill btn"
@@ -180,7 +188,7 @@ export function MealIngredientListItem({
           </span>
         )}
         {'  '}
-        {createdMeal && (
+        {createdMeal && editIngredients && (
           <span
             className="badge bg-danger rounded-pill btn"
             onClick={() => {

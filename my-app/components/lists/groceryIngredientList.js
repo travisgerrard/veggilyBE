@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useRequest from '../../hooks/use-request';
+import ReactMarkdown from 'react-markdown';
 
 export default function GroceryIngredientList({ groceryList }) {
   const [listIdToToggle, setListIdToToggle] = useState('');
@@ -74,7 +75,7 @@ export default function GroceryIngredientList({ groceryList }) {
               marginRight: '10px',
             }}
           >
-            {ingredient.title}
+            <ReactMarkdown>{ingredient.title}</ReactMarkdown>
           </p>
         </span>
 
