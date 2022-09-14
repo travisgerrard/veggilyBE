@@ -22,7 +22,10 @@ export default function NewMeal() {
     body: {
       title,
     },
-    onSuccess: () => Router.push('/'),
+    onSuccess: (meal) => {
+      console.log(meal);
+      Router.push(`/meals/${meal?.id}`);
+    },
   });
 
   useEffect(() => {

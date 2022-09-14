@@ -85,6 +85,7 @@ router.post(
         creatorId: req.currentUser!.id,
       });
       await meal.save();
+      console.log(meal);
       return res.status(201).send(meal);
     } catch {
       return next({
