@@ -69,14 +69,14 @@ export default function GroceryIngredientList({ groceryList }) {
               setListIdToToggle(ingredient.id);
             }}
           />
-          <p
+          <span
             style={{
               marginLeft: '40px',
               marginRight: '10px',
             }}
           >
             <ReactMarkdown>{ingredient.title}</ReactMarkdown>
-          </p>
+          </span>
         </span>
 
         <span

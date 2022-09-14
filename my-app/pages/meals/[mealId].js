@@ -164,7 +164,6 @@ export default function MealShow({
       />
       {isLoggedIn && (
         <>
-          <h2>Comments</h2>
           <MealCommentList comments={comments} mealId={meal.id} />
         </>
       )}
@@ -175,7 +174,7 @@ export default function MealShow({
 MealShow.getInitialProps = async (context, client) => {
   let { mealId } = context.query;
   if (mealId === undefined) {
-    mealId = "62df673f60fb315ff0bbc75e"
+    mealId = '62df673f60fb315ff0bbc75e';
   }
 
   const { data: mealData } = await client.get(`/api/meals/${mealId}`);

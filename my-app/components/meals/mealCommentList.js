@@ -6,6 +6,8 @@ import ReactMarkdown from 'react-markdown';
 export default function MealCommentList({ comments, mealId }) {
   const [comment, setComment] = useState('');
   const [commentsArray, setCommentsArray] = useState(comments);
+  const [isUploading, setIsUploading] = useState(false);
+  const [showAddCommentPrompt, setShowAddCommentPrompt] = useState(false);
 
   const [file, setFile] = useState(undefined);
   const [previewImage, setPreviewImage] = useState({
@@ -26,9 +28,10 @@ export default function MealCommentList({ comments, mealId }) {
       dateMade: new Date(),
     },
     onSuccess: (event) => {
-      comments.push(event);
+      comments.unshift(event);
       setCommentsArray(comments);
       setComment('');
+      setIsUploading(false);
     },
   });
 
@@ -48,7 +51,8 @@ export default function MealCommentList({ comments, mealId }) {
         // Display error
         console.log('error');
       }
-      // fileInputRef.current.value = '';
+    } else {
+      fileInputRef.current.value = '';
     }
     return () => {
       window.URL.revokeObjectURL(previewImage);
@@ -57,6 +61,7 @@ export default function MealCommentList({ comments, mealId }) {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    setIsUploading(true);
 
     if (file) {
       const formData = new FormData();
@@ -72,12 +77,21 @@ export default function MealCommentList({ comments, mealId }) {
             'Content-Type': 'multipart/form-data',
           },
         });
-        comments.push(post.data);
+        comments.unshift(post.data);
         setCommentsArray(comments);
         setComment('');
         fileInputRef.current.value = '';
+        setFile(undefined);
+        setPreviewImage({
+          src: null,
+          crop: {},
+          filter: null,
+          filterName: '',
+        });
+        setIsUploading(false);
       } catch (error) {
         console.log(error);
+        setIsUploading(false);
       }
     } else {
       addComment();
@@ -99,55 +113,115 @@ export default function MealCommentList({ comments, mealId }) {
     );
   });
 
+  const addComentForm = (
+    <form onSubmit={onSubmit}>
+      <div className="form-group">
+        <label>Add Comment</label>
+        <input
+          className="form-control"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <br />
+        <>
+          <label
+            style={{ cursor: 'pointer' }}
+            className="btn btn-outline-primary"
+            htmlFor="file-upload"
+          >
+            AddPhoto
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            style={{ display: 'none' }}
+            accept="image/*"
+            // Get the first selected file
+            onChange={(event) => setFile(event.target.files[0])}
+            ref={fileInputRef}
+          />
+        </>
+      </div>
+      <div>
+        {previewImage.src && (
+          <img
+            src={previewImage.src}
+            alt="Preview"
+            style={{
+              filter: previewImage.filter,
+              width: '9rem',
+              height: '6rem',
+              objectFit: 'cover',
+            }}
+          />
+        )}
+      </div>
+      <br />
+      {errors}
+      {isUploading ? (
+        <button
+          className="btn btn-primary"
+          type="button"
+          disabled
+          style={{ marginBottom: '25px' }}
+        >
+          <span
+            className="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          <span className="visually-hidden">Uploading...</span>
+        </button>
+      ) : (
+        <div className="d-flex w-100 justify-content-between">
+          <button className="btn btn-primary" style={{ marginBottom: '25px' }}>
+            Submit
+          </button>
+          <button
+            className="btn btn-danger"
+            style={{ marginBottom: '25px' }}
+            onClick={() => {
+              setShowAddCommentPrompt(false);
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      )}
+    </form>
+  );
+
+  const addCommentButton = (
+    <>
+      <button
+        className="btn btn-primary"
+        onClick={() => {
+          setShowAddCommentPrompt(true);
+        }}
+      >
+        Add Comment
+      </button>
+      <input
+        id="file-upload"
+        type="file"
+        style={{ display: 'none' }}
+        accept="image/*"
+        // Get the first selected file
+        onChange={(event) => setFile(event.target.files[0])}
+        ref={fileInputRef}
+      />
+    </>
+  );
+
   return (
     <>
+      <div className="d-flex w-100 justify-content-between">
+        <h2>Comments</h2>
+        {!showAddCommentPrompt && addCommentButton}
+      </div>
+      <hr />
+      {showAddCommentPrompt && addComentForm}
       <div className="list-group">{commentList}</div>
-      <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <label>Add Comment</label>
-          <input
-            className="form-control"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
-          <br />
-          <>
-            <label
-              style={{ cursor: 'pointer' }}
-              className="btn btn-outline-primary"
-              htmlFor="file-upload"
-            >
-              AddPhoto
-            </label>
-            <input
-              id="file-upload"
-              type="file"
-              style={{ display: 'none' }}
-              accept="image/*"
-              // Get the first selected file
-              onChange={(event) => setFile(event.target.files[0])}
-              ref={fileInputRef}
-            />
-          </>
-        </div>
-        <div>
-          {previewImage.src && (
-            <img
-              src={previewImage.src}
-              alt="Preview"
-              style={{
-                filter: previewImage.filter,
-                width: '9rem',
-                height: '6rem',
-                objectFit: 'cover',
-              }}
-            />
-          )}
-        </div>
-        <br />
-        {errors}
-        <button className="btn btn-primary">Submit</button>
-      </form>
     </>
   );
 }

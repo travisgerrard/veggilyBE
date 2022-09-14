@@ -18,7 +18,7 @@ router.get('/api/comments/meal/:id', async (req: Request, res: Response) => {
   const comments = await Comment.find({
     meal: req.params.id,
     creatorId: req.currentUser!.id,
-  });
+  }).sort({ dateMade: -1 });
 
   res.send(comments);
 });
