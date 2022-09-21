@@ -6,6 +6,9 @@ import axios from 'axios';
 export default function NewMeal() {
   const [title, setTitle] = useState('');
   const [whereToFind, setWhereToFind] = useState('');
+
+  const [isUploading, setIsUploading] = useState(false);
+
   const [file, setFile] = useState(undefined);
   const [previewImage, setPreviewImage] = useState({
     src: null,
@@ -21,10 +24,12 @@ export default function NewMeal() {
     method: 'post',
     body: {
       title,
+      whereToFind,
     },
     onSuccess: (meal) => {
       console.log(meal);
       Router.push(`/meals/${meal?.id}`);
+      setIsUploading(false);
     },
   });
 
@@ -44,7 +49,8 @@ export default function NewMeal() {
         // Display error
         console.log('error');
       }
-      // fileInputRef.current.value = '';
+    } else {
+      fileInputRef.current.value = '';
     }
     return () => {
       window.URL.revokeObjectURL(previewImage);
@@ -53,6 +59,7 @@ export default function NewMeal() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    setIsUploading(true);
 
     if (file) {
       const formData = new FormData();
@@ -65,12 +72,23 @@ export default function NewMeal() {
             'Content-Type': 'multipart/form-data',
           },
         });
+        fileInputRef.current.value = '';
+        setFile(undefined);
+        setPreviewImage({
+          src: null,
+          crop: {},
+          filter: null,
+          filterName: '',
+        });
+        setIsUploading(false);
         Router.push('/');
       } catch (error) {
         console.log(err);
+        setIsUploading(false);
       }
     } else {
       doRequest();
+      setIsUploading(false);
     }
   };
 
@@ -128,7 +146,23 @@ export default function NewMeal() {
         </div>
         <br />
         {errors}
-        <button className="btn btn-primary">Submit</button>
+        {isUploading ? (
+          <button
+            className="btn btn-primary"
+            type="button"
+            disabled
+            style={{ marginBottom: '25px' }}
+          >
+            <span
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span className="visually-hidden">Uploading...</span>
+          </button>
+        ) : (
+          <button className="btn btn-primary">Submit</button>
+        )}
       </form>
     </div>
   );

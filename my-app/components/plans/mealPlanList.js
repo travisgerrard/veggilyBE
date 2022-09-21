@@ -70,10 +70,21 @@ export default function MealPlanList({ planList }) {
                   setListIdToToggle(meal.id);
                 }}
               />
-              {meal.meal.thumbnail && (
+              {meal.meal.thumbnail ? (
                 <img
                   src={meal.meal.thumbnail}
                   alt="Preview"
+                  style={{
+                    width: '9rem',
+                    height: '6rem',
+                    objectFit: 'cover',
+                    marginLeft: '40px',
+                    marginRight: '10px',
+                  }}
+                />
+              ) : (
+                <img
+                  alt="No image"
                   style={{
                     width: '9rem',
                     height: '6rem',
@@ -88,7 +99,7 @@ export default function MealPlanList({ planList }) {
                 as={`/meals/${meal.meal.id}`}
                 style={{ marginLeft: '50px' }}
               >
-                {meal.meal.title}
+                <a>{meal.meal.title}</a>
               </Link>
             </span>
 

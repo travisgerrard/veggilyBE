@@ -75,7 +75,13 @@ export default function GroceryIngredientList({ groceryList }) {
               marginRight: '10px',
             }}
           >
-            <ReactMarkdown>{ingredient.title}</ReactMarkdown>
+            <ReactMarkdown
+              components={{
+                p: React.Fragment,
+              }}
+            >
+              {ingredient.title}
+            </ReactMarkdown>
           </span>
         </span>
 

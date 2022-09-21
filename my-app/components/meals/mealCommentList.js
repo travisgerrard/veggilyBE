@@ -95,6 +95,7 @@ export default function MealCommentList({ comments, mealId }) {
       }
     } else {
       addComment();
+      setIsUploading(false);
     }
   };
 
@@ -361,7 +362,13 @@ export function CommentListItem({
             />
           )}
           <h5 className="mb-1 align-self-center">
-            <ReactMarkdown>{commentText}</ReactMarkdown>
+            <ReactMarkdown
+              components={{
+                p: React.Fragment,
+              }}
+            >
+              {commentText}
+            </ReactMarkdown>
           </h5>
         </div>
       )}

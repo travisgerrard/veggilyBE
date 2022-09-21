@@ -3,6 +3,8 @@ import MealCommentList from '../../components/meals/mealCommentList';
 import MealIngredientList from '../../components/meals/mealIngredientList';
 import useRequest from '../../hooks/use-request';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function MealShow({
   meal,
@@ -126,7 +128,14 @@ export default function MealShow({
       <h1>{meal.title} </h1>
       {spacer}
 
-      <a href={meal.whereToFind}>{meal.whereToFind}</a>
+      <ReactMarkdown
+        components={{
+          p: React.Fragment,
+        }}
+        remarkPlugins={[remarkGfm]}
+      >
+        {meal.whereToFind}
+      </ReactMarkdown>
       {spacer}
       {createdMeal && (
         <Link href="/meals/edit/[mealdId]" as={`/meals/edit/${meal.id}`}>

@@ -1,13 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
-import PlanShow from './plans/index'
+import PlanShow from './plans/index';
 
 const LandingPage = ({ currentUser, meals, plans }) => {
   const mealList = meals.map((meal) => {
     return (
       <tr key={meal.id}>
         <td>
-          {meal.thumbnail && (
+          {meal.thumbnail ? (
             <img
               src={meal.thumbnail}
               alt="Preview"
@@ -15,6 +15,19 @@ const LandingPage = ({ currentUser, meals, plans }) => {
                 width: '9rem',
                 height: '6rem',
                 objectFit: 'cover',
+                marginLeft: '40px',
+                marginRight: '10px',
+              }}
+            />
+          ) : (
+            <img
+              alt="No image"
+              style={{
+                width: '9rem',
+                height: '6rem',
+                objectFit: 'cover',
+                marginLeft: '40px',
+                marginRight: '10px',
               }}
             />
           )}
@@ -54,7 +67,6 @@ LandingPage.getInitialProps = async (context, client, currentUser) => {
   if (currentUser) {
     const { data: plans } = await client.get('/api/plans');
     return { meals: data, plans };
-
   }
 
   return { meals: data };

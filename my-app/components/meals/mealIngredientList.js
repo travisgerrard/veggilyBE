@@ -154,7 +154,13 @@ export function MealIngredientListItem({
 
   return (
     <li className="list-group-item d-flex justify-content-between align-items-center">
-      <ReactMarkdown>{ingredient.title}</ReactMarkdown>
+      <ReactMarkdown
+        components={{
+          p: React.Fragment,
+        }}
+      >
+        {ingredient.title}
+      </ReactMarkdown>
       <span>
         {createdMeal && editIngredients && (
           <>
