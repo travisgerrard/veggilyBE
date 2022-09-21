@@ -5,7 +5,7 @@ import useRequest from '../../hooks/use-request';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { InstructionListItem } from '../../components/meals/InstructionListItem';
+import { InstructionListItem } from '../../components/meals/instructionListItem';
 
 export default function MealShow({
   meal,
