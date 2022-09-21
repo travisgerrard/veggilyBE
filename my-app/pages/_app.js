@@ -9,6 +9,11 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
       <div className="container">
         <Component currentUser={currentUser} {...pageProps} />
       </div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
   );
 };

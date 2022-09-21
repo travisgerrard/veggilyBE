@@ -39,7 +39,8 @@ router.post(
   [check('title').notEmpty().withMessage('Title is required')],
   validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { title, whereToFind, imageUrl, thumbnail, mealType } = req.body;
+    const { title, whereToFind, imageUrl, thumbnail, mealType, tags } =
+      req.body;
 
     if (!(req as MulterRequest).file) {
       const meal = Meal.build({
@@ -49,6 +50,7 @@ router.post(
         thumbnail,
         mealType,
         creatorId: req.currentUser!.id,
+        tags,
       });
       await meal.save();
       return res.status(201).send(meal);
@@ -83,6 +85,7 @@ router.post(
         thumbnail: thumbnailUrl,
         mealType,
         creatorId: req.currentUser!.id,
+        tags,
       });
       await meal.save();
       console.log(meal);

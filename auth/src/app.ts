@@ -42,6 +42,9 @@ import { decreaseInstructionOrderRouter } from './routes/instructions/decreaseIn
 import { createInstructionRouter } from './routes/instructions/new';
 import { deleteInstructionRouter } from './routes/instructions/delete';
 import { indexInstructionRouter } from './routes/instructions/';
+import { addTagToMealRouter } from './routes/meals/addTagToMeal';
+import { removeTagFromMealRouter } from './routes/meals/removeTagFromMeal';
+import { getAllTagsRouter } from './routes/meals/getAllTags';
 
 const app = express();
 app.set('trust proxy', true);
@@ -53,7 +56,6 @@ app.use(
   })
 );
 app.use(express.static(path.join(__dirname, '../../my-app/out')));
-
 
 app.use(currentUser);
 
@@ -67,6 +69,9 @@ app.use(createMealRouter);
 app.use(updateMealRouter);
 app.use(showMealRouter);
 app.use(addMealToPlanRouter);
+app.use(addTagToMealRouter);
+app.use(removeTagFromMealRouter);
+app.use(getAllTagsRouter);
 
 app.use(addIngredientToListRouter);
 app.use(indexIngredientRouter);
@@ -102,7 +107,7 @@ app.use(createInstructionRouter);
 app.use(deleteInstructionRouter);
 app.use(indexInstructionRouter);
 
-app.get('/', (req,res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../../my-app/out/index.html'));
 });
 

@@ -53,7 +53,7 @@ it('creates a meal with valid input', async () => {
     .expect(201);
 
   meals = await Meal.find({});
-  // console.log(meals[0]);
+  console.log(meals[0]);
 
   expect(meals.length).toEqual(1);
   expect(meals[0].title).toEqual(title);

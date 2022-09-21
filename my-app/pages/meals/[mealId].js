@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MealCommentList from '../../components/meals/mealCommentList';
 import MealIngredientList from '../../components/meals/mealIngredientList';
 import useRequest from '../../hooks/use-request';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { InstructionListItem } from '../../components/meals/InstructionListItem';
 
 export default function MealShow({
   meal,
@@ -22,6 +23,10 @@ export default function MealShow({
 
   const [instructionArray, setInstructionArray] = useState(instructions);
   const [editInstructions, setEditInstructions] = useState(false);
+
+  const [tags, setTags] = useState(meal.tags);
+  const [tagText, setTagText] = useState();
+  const [tagToDelete, setTagToDelete] = useState('');
 
   const { doRequest: addMealToPlan, errors } = useRequest({
     url: `/api/meals/addMealToPlan/${meal.id}`,
@@ -49,6 +54,36 @@ export default function MealShow({
       setInstructionToAdd('');
     },
   });
+
+  const { doRequest: addTag, errors: addTagErrors } = useRequest({
+    url: `/api/meals/${meal.id}/addTag`,
+    method: 'put',
+    body: {
+      tag: tagText,
+    },
+    onSuccess: (event) => {
+      setTags(event);
+      setTagText('');
+    },
+  });
+
+  const { doRequest: removeTag, errors: removeTagErrors } = useRequest({
+    url: `/api/meals/${meal.id}/removeTag`,
+    method: 'put',
+    body: {
+      tag: tagToDelete,
+    },
+    onSuccess: (event) => {
+      setTags(event);
+      setTagToDelete('');
+    },
+  });
+
+  useEffect(() => {
+    if (tagToDelete !== '') {
+      removeTag();
+    }
+  }, [tagToDelete]);
 
   const spacer = (
     <div>
@@ -80,6 +115,7 @@ export default function MealShow({
             index={index}
             createdMeal={createdMeal}
             updateInstructions={updateInstructions}
+            key={instruction.id}
           />
         );
       })}
@@ -125,7 +161,7 @@ export default function MealShow({
 
   return (
     <div>
-      <h1>{meal.title} </h1>
+      <h1>{meal.title}</h1>
       {spacer}
 
       <ReactMarkdown
@@ -141,6 +177,53 @@ export default function MealShow({
         <Link href="/meals/edit/[mealdId]" as={`/meals/edit/${meal.id}`}>
           <a>Edit meal information</a>
         </Link>
+      )}
+      {createdMeal && (
+        <>
+          <div className="input-group">
+            <button
+              className={'btn btn-outline-secondary'}
+              type="button"
+              onClick={() => {
+                addTag();
+              }}
+            >
+              Add Tag
+            </button>
+            <input
+              type="text"
+              className="form-control"
+              value={tagText}
+              onChange={(e) => setTagText(e.target.value)}
+            />
+          </div>
+          {addTagErrors}
+          {spacer}
+          <div className="d-flex w-100">
+            {tags.map((tag) => (
+              <h5 key={tag}>
+                <span
+                  className="badge bg-info"
+                  style={{ color: 'white', marginRight: '5px' }}
+                  key={tag}
+                >
+                  {tag}
+                  <button
+                    type="button"
+                    className="btn btn-warning btn-sm"
+                    aria-label="Close"
+                    style={{ marginLeft: '5px' }}
+                    onClick={() => {
+                      setTagToDelete(tag);
+                    }}
+                  >
+                    x
+                  </button>
+                </span>
+              </h5>
+            ))}
+          </div>
+        </>
       )}
       {spacer}
 
@@ -205,99 +288,3 @@ MealShow.getInitialProps = async (context, client) => {
     instructions: instructionData,
   };
 };
-
-export function InstructionListItem({
-  instruction,
-  instructions,
-  updateInstructions,
-  index,
-  editInstructions,
-  createdMeal,
-}) {
-  const { doRequest: increaseInstruction, errors: increaseInstructionError } =
-    useRequest({
-      url: `/api/instructions/increase/${instruction.id}`,
-      method: 'put',
-      body: {},
-      onSuccess: (event) => {
-        var itemIndex = instructions
-          .map((instruction) => instruction.id)
-          .indexOf(instruction.id);
-
-        var element = instructions[itemIndex];
-        instructions.splice(itemIndex, 1);
-        instructions.splice(itemIndex + 1, 0, element);
-
-        updateInstructions(instructions);
-      },
-    });
-
-  const { doRequest: decreaseInstruction, errors: decreaseInstructionError } =
-    useRequest({
-      url: `/api/instructions/decrease/${instruction.id}`,
-      method: 'put',
-      body: {},
-      onSuccess: (event) => {
-        var itemIndex = instructions
-          .map((instruction) => instruction.id)
-          .indexOf(instruction.id);
-
-        var element = instructions[itemIndex];
-        instructions.splice(itemIndex, 1);
-        instructions.splice(itemIndex - 1, 0, element);
-
-        updateInstructions(instructions);
-      },
-    });
-
-  const { doRequest: deleteInstruction, errors: deleteInstructionError } =
-    useRequest({
-      url: `/api/instructions/${instruction.id}`,
-      method: 'delete',
-      body: {},
-      onSuccess: (event) => {
-        var removeIndex = instructions
-          .map((instruction) => instruction.id)
-          .indexOf(instruction.id);
-        ~removeIndex && instructions.splice(removeIndex, 1);
-
-        updateInstructions(instructions);
-      },
-    });
-
-  return (
-    <div className="d-flex w-100 justify-content-between">
-      <p key={instruction.text}>
-        {index + 1}. {instruction.text}
-      </p>
-      {createdMeal && editInstructions && (
-        <div>
-          <span
-            className="badge bg-primary rounded-pill btn"
-            onClick={() => {
-              decreaseInstruction();
-            }}
-          >
-            ↑
-          </span>{' '}
-          <span
-            className="badge bg-primary rounded-pill btn"
-            onClick={() => {
-              increaseInstruction();
-            }}
-          >
-            ↓
-          </span>
-          <span
-            className="badge bg-danger rounded-pill btn"
-            onClick={() => {
-              deleteInstruction(instruction.id);
-            }}
-          >
-            Delete
-          </span>
-        </div>
-      )}
-    </div>
-  );
-}

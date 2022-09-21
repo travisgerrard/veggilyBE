@@ -11,6 +11,7 @@ interface MealAttrs {
   thumbnail: string;
   mealType: MealType;
   creatorId: string;
+  tags: Array<string>;
 }
 
 export interface MealDoc extends mongoose.Document {
@@ -21,6 +22,7 @@ export interface MealDoc extends mongoose.Document {
   mealType: MealType;
   creatorId: string;
   version: number;
+  tags: Array<string>;
 }
 
 interface MealModel extends mongoose.Model<MealDoc> {
@@ -53,6 +55,11 @@ const mealSchema = new mongoose.Schema(
       type: String,
       required: false,
       enum: Object.values(MealType),
+    },
+    tags: {
+      type: [String],
+      required: true,
+      default: [],
     },
   },
   {
