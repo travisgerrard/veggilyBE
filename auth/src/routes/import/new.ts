@@ -97,6 +97,7 @@ router.post(
         thumbnail: thumbnailUrl,
         mealType: MealType.Dinner,
         creatorId: req.currentUser!.id,
+        tags: [],
       });
       await meal.save();
 
