@@ -18,7 +18,7 @@ const LandingPage = ({ currentUser, meals, plans, tags }) => {
                 width: '9rem',
                 height: '6rem',
                 objectFit: 'cover',
-                marginLeft: '40px',
+                // marginLeft: '40px',
                 marginRight: '10px',
               }}
             />
@@ -29,7 +29,7 @@ const LandingPage = ({ currentUser, meals, plans, tags }) => {
                 width: '9rem',
                 height: '6rem',
                 objectFit: 'cover',
-                marginLeft: '40px',
+                // marginLeft: '40px',
                 marginRight: '10px',
               }}
             />
@@ -37,7 +37,7 @@ const LandingPage = ({ currentUser, meals, plans, tags }) => {
         </td>
         <td>
           <div className="d-flex align-items-start flex-column mb-2">
-            <div class="mb-auto p-2">{meal.title}</div>
+            <div className="mb-auto p-2">{meal.title}</div>
             {meal.tags && (
               <div className="d-flex w-100 p-2">
                 {meal.tags.map((tag) => (
@@ -56,7 +56,7 @@ const LandingPage = ({ currentUser, meals, plans, tags }) => {
           </div>
         </td>
         <td>
-          <Link href="/meals/[mealdId]" as={`/meals/${meal.id}`}>
+          <Link href={`/meals/${meal.id}`}>
             <a>View</a>
           </Link>
         </td>

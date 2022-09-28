@@ -20,8 +20,15 @@ export default function PlanShow({ plans }) {
       }
     });
 
-    navigator.clipboard.writeText(textToShare);
-    setDidShare(true);
+    navigator.clipboard.writeText(textToShare).then(
+      () => {
+        /* clipboard successfully set */
+        setDidShare(true);
+      },
+      () => {
+        console.log('something went wrong with writing to the clipboard');
+      }
+    );
   };
 
   return (

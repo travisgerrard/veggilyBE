@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import useRequest from '../../hooks/use-request';
 
-export default function signin() {
+export default function signin({ prevPath }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  console.log(prevPath);
+
   const { doRequest, errors } = useRequest({
     url: '/api/users/signin',
     method: 'post',
@@ -12,7 +15,7 @@ export default function signin() {
       email,
       password,
     },
-    onSuccess: () => Router.push('/'),
+    onSuccess: () => Router.push(prevPath),
   });
 
   const onSubmit = async (event) => {
