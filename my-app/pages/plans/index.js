@@ -8,21 +8,22 @@ export default function PlanShow({ plans }) {
     let textToShare = ``;
     plans.forEach((plan) => {
       textToShare =
-        textToShare + `${plan.meal.title} \n ${plan.meal.whereToFind} \n`;
+        textToShare +
+        `${plan.meal.title} <br /> ${plan.meal.whereToFind} <br />`;
       if (plan.ingredients.length > 0) {
         plan.ingredients.forEach((listItem) => {
           const isComplete = listItem.isCompleted ? '☒' : '☐';
-          textToShare = textToShare + `${isComplete} ${listItem.title} \n`;
+          textToShare = textToShare + `${isComplete} ${listItem.title} <br />`;
         });
-        textToShare = textToShare + '\n';
+        textToShare = textToShare + '<br />';
       } else {
-        textToShare = textToShare + '\n';
+        textToShare = textToShare + '<br />';
       }
     });
 
     console.log(textToShare);
     var textField = document.createElement('textarea');
-    textField.innerText = textToShare;
+    textField.innerHTML = textToShare;
     document.body.appendChild(textField);
     textField.select();
     document.execCommand('copy');
