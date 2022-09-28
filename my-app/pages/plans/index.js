@@ -8,23 +8,27 @@ export default function PlanShow({ plans }) {
     let textToShare = ``;
     plans.forEach((plan) => {
       textToShare =
-        textToShare +
-        `${plan.meal.title} <br /> ${plan.meal.whereToFind} <br />`;
+        textToShare + `${plan.meal.title} \r\n ${plan.meal.whereToFind} \r\n`;
       if (plan.ingredients.length > 0) {
         plan.ingredients.forEach((listItem) => {
           const isComplete = listItem.isCompleted ? '☒' : '☐';
-          textToShare = textToShare + `${isComplete} ${listItem.title} <br />`;
+          textToShare = textToShare + `${isComplete} ${listItem.title} \r\n`;
         });
-        textToShare = textToShare + '<br />';
+        textToShare = textToShare + '\r\n';
       } else {
-        textToShare = textToShare + '<br />';
+        textToShare = textToShare + '\r\n';
       }
     });
 
     console.log(textToShare);
     var textField = document.createElement('textarea');
+    // textToShare = textToShare.replace(/\r?\n/g, '<br />');
+
     textField.innerHTML = textToShare;
-    document.body.appendChild(textField);
+
+    const parentElement = document.getElementById('needed-for-copy');
+    parentElement.appendChild(textField);
+
     textField.select();
     document.execCommand('copy');
     setDidShare(true);
@@ -45,7 +49,10 @@ export default function PlanShow({ plans }) {
 
   return (
     <div>
-      <div className="d-flex w-100 justify-content-between">
+      <div
+        className="d-flex w-100 justify-content-between"
+        id="needed-for-copy"
+      >
         <h1>Weekly plan</h1>
         <button type="button" className="btn btn-link">
           <h5 onClick={share}>{didShare ? 'Copied to clipboard' : 'Share'}</h5>
