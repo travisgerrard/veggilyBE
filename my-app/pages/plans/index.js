@@ -21,17 +21,25 @@ export default function PlanShow({ plans }) {
     });
 
     console.log(textToShare);
-    navigator.clipboard.writeText(textToShare).then(
-      () => {
-        /* clipboard successfully set */
-        setDidShare(true);
-        alert('successfully copied');
-      },
-      () => {
-        alert('something went wrong');
-        console.log('something went wrong with writing to the clipboard');
-      }
-    );
+    var textField = document.createElement('textarea');
+    textField.innerText = textToShare;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    setDidShare(true);
+
+    textField.remove();
+    // navigator.clipboard
+    //   .writeText(textToShare)
+    //   .then(() => {
+    //     /* clipboard successfully set */
+    //     setDidShare(true);
+    //     alert('successfully copied');
+    //   })
+    //   .catch(() => {
+    //     alert('something went wrong');
+    //     console.log('something went wrong with writing to the clipboard');
+    //   });
   };
 
   return (
