@@ -6,8 +6,6 @@ export default function signin({ prevPath }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  console.log(prevPath);
-
   const { doRequest, errors } = useRequest({
     url: '/api/users/signin',
     method: 'post',
@@ -15,7 +13,13 @@ export default function signin({ prevPath }) {
       email,
       password,
     },
-    onSuccess: () => Router.push(prevPath),
+    onSuccess: () => {
+      if (prevPath) {
+        Router.push(prevPath);
+      } else {
+        Router.push('/');
+      }
+    },
   });
 
   const onSubmit = async (event) => {
