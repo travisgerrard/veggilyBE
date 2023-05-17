@@ -1,8 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import PlanShow from './plans/index';
 
 const LandingPage = ({ currentUser, meals, plans, tags }) => {
+  const isLoggedIn = currentUser?.id;
+
   const [mealsToList, setMealsToList] = useState(meals);
   const [isShowingFilteredList, setisShowingFilteredList] = useState(undefined);
   const [suggestions, setSuggestions] = useState('');
@@ -18,6 +20,24 @@ const LandingPage = ({ currentUser, meals, plans, tags }) => {
       }, 500);
     };
   };
+
+  const { doRequest, errors } = useRequest({
+    url: '/api/users/signin',
+    method: 'post',
+    body: {
+      email: 'test@test.com',
+      password: 'test@test.com',
+    },
+    onSuccess: () => {
+      Router.push('/');
+    },
+  });
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      doRequest();
+    }
+  }, []);
 
   const handleChange = (value) => {
     console.log(value);
