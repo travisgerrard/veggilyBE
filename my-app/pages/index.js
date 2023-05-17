@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import PlanShow from './plans/index';
+import useRequest from '../hooks/use-request';
 
 const LandingPage = ({ currentUser, meals, plans, tags }) => {
   const isLoggedIn = currentUser?.id;
